@@ -1,0 +1,14 @@
+from django.contrib.auth.password_validation import password_changed
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView
+# from django.contrib.auth.urls import
+from django.urls import path, include
+from .views import ProfileUpdateView, RegisterView, ProfileDetailView
+
+
+urlpatterns = [
+    path('', include('django.contrib.auth.urls')),
+    path('signup/', RegisterView.as_view(), name='signup'),
+    path('profile/', ProfileDetailView.as_view(), name='profile'),
+    path('profile/edit/', ProfileUpdateView.as_view(), name='profile_edit'),
+
+]

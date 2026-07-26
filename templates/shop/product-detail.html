@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% load static tailwind_tags %}
+<!doctype html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {% tailwind_css %}
+
+</head>
+
+<body class="bg-zinc-800 products/5 text-white font-Dana">
+
+{% block header %}
+	
+{% endblock %}
+
+{% block content %}
+    <main id="cart-data"
+          data-add-to-favorite-url="{% url 'shop:add_favorite' %}"
+          data-add-to-cart-url="{% url 'cart:session-add-product' %}"
+          data-login-url="{% url 'login' %}"
+          data-increase-url="{% url 'cart:session-increase-product' %}"
+          data-decrease-url="{% url 'cart:session-decrease-product' %}"
+          data-csrf-token="{{ csrf_token }}"
+          class="wrapper mx-auto p-12 min-h-screen">
+        <div class="space-y-12">
+            <!-- top -->
+            <div class="flex justify-between items-center gap-x-12">
+                <!-- rigth -->
+                <div class="max-w-[800px] space-y-5">
+                    <h1 class="font-MorabbaBold text-2xl">{{ product.title }}</h1>
+                    <div class="text-xl">
+                        <span>برزیل</span>
+                        <span>/</span>
+                        <span>رست مدیوم</span>
+                    </div>
+                    <!-- stars -->
+                    <div class="flex gap-x-5">
+                        <div class="flex gap-x-1.5 text-yellow-400">
+
+                            <svg class="w-4 h-4 md:w-6 md:h-6">
+                                <use href="#star"></use>
+                            </svg>
+
+                            <svg class="w-4 h-4 md:w-6 md:h-6">
+                                <use href="#star"></use>
+                            </svg>
+
+                            <svg class="w-4 h-4 md:w-6 md:h-6">
+                                <use href="#star"></use>
+                            </svg>
+
+                            <svg class="w-4 h-4 md:w-6 md:h-6">
+                                <use href="#star"></use>
+                            </svg>
+
+                            <svg class="w-4 h-4 md:w-6 md:h-6">
+                                <use href="#star"></use>
+                            </svg>
+
+
+                        </div>
+                        <div>
+                            <span class="text-xl text-green-500">{{ product.comments.all.count }}</span>
+                            <span class="text-xl text-green-500">نظر</span>
+
+                        </div>
+                    </div>
+                    <!-- price -->
+                    <span class="inline-block text-2xl font-DanaDemiBold">{{ product.price }} تومان</span>
+                    <!-- description -->
+                    <p class="text-lg">{{ product.description }}</p>
+                </div>
+                <!-- left -->
+                <div class="w-[300px] h-[300px]">
+                    <img class=" w-full" src="{{ product.image.url }}" alt="">
+                </div>
+
+            </div>
+
+            <!-- center -->
+            <div class="flex items-center justify-between">
+
+                <button type="button" class="{% if product.id in favorite_ids %}active{% endif %}"
+                        id="favorite-{{ product.id }}"
+                        onclick="addToFavorite({{ product.id }})"
+                >
+                    <svg class="w-10 h-10">
+                        <use href="#heart"></use>
+                    </svg>
+
+                </button>
+
+
+             <!-- تعداد -->
+
+                    {% if product.id in product_in_cart %}
+                    	<span class="text-white">محصول به سبد خرید اضافه شده</span>
+                        <div class="w-[20%] flex-center gap-x-1.5 text-3xl h-12">
+                        {% if product.id in quantity_in_cart %}
+                        	<button onclick="increaseProduct({{ product.id }})">+</button>
+                            <span>{{ quantity }}</span>
+                            <button onclick="decreaseProduct({{ product.id }})">-</button>
+                        {% endif %} 
+
+                        </div>
+                        {% else %}
+                         <button
+                            id="cart-btn-{{ product.id }}"
+                            type="button"
+                            onclick="addToCart({{ product.id }})"
+                            >
+                            <svg class="w-4 h-4 md:w-[22px] md:h-[22px]">
+                                <use href="#shopping-cart"></use>
+                            </svg>
+                         </button>
+
+                    {% endif %}
+
+            </div>
+
+            <!-- comments -->
+            <div class="pt-8">
+                <div class="flex items-center justify-between ">
+                    <h1 class="font-MorabbaBold text-2xl ">نظرات</h1>
+                    <h2>ثبت نظرات</h2>
+                </div>
+
+                {% for comment in comments %}
+                    <div class="space-y-3 border-t border-t-white/20 pt-3 mt-3 ">
+                        <div class="flex items-center justify-between gap-x-5">
+                            <h1 class="text-xl ">{{ comment.name }}</h1>
+                            <h3 class="pr-5 text-gray-700 text-sm">
+                                {% if request.user.is_authenticated %}
+                                    {{ user.email }}
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <p class="text-xl">گفته : {{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- add comment -->
+
+            <section class="mt-10 rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 shadow-2xl backdrop-blur-sm">
+                <!-- header -->
+                <div class="mb-8 flex items-center justify-between border-b border-zinc-800">
+                    <div>
+                        <h3 class="text-xl text-white">ثبت دیدگاه</h3>
+                        <p class="mt-2 text-sm leading-7 text-zinc-400">
+                            تجربه‌ات از این محصول را با بقیه به اشتراک بگذار.
+                        </p>
+                    </div>
+                </div>
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="space-y-5">
+                        <div>
+                            <label>نام و نام خانوادگی</label>
+                            <input type="text" name="name"
+                                   class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none transition focus:border-emerald-500 mt-3">
+                        </div>
+                        <div>
+                            <label>عنوان نظر</label>
+                            <input type="text" name="title"
+                                   class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none transition focus:border-emerald-500 mt-3">
+
+                        </div>
+                        <div>
+                            <label>متن نظر</label>
+                            <textarea
+                                    id="body"
+                                    name="content"
+                                    rows="5"
+                                    class="w-full rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-white outline-none transition focus:border-emerald-500 mt-3"
+                                    placeholder="نظر خود را بنویسید"
+                            ></textarea>
+                        </div>
+
+                        <div class="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 text-sm leading-7 text-amber-200">
+                            دیدگاه شما بعد از بررسی توسط مدیر سایت منتشر می‌شود.
+                        </div>
+
+                        <button type="submit" class="font-MorabbaLight text-xl w-full bg-teal-700 rounded-xl">ثبت دیدگاه
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+        </div>
+
+    </main>
+{% endblock %}
+
+{% block js %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{% static 'src/js/cart.js' %}"></script>
+
+{% endblock %}
+
+</body>
+
+</html>

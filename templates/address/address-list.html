@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static tailwind_tags %}
+
+<body>
+
+{% block content %}
+    <svg class="hidden">
+
+
+
+
+</svg>
+	<section id="address-data"
+            data-set-default-url="{% url 'address:set-default' %}"
+            data-delete-address-url="{% url 'address:address-delete' %}"
+            data-csrf-token="{{ csrf_token }}"
+            class="font-Dana text-white pt-12 min-h-screen bg-zinc-900">
+    <div class="wrapper space-y-10">
+
+        {# top #}
+        <div class="flex items-center justify-between">
+            {# right #}
+            <div>
+                <div>
+                    <div class="flex items-center gap-x-2">
+                        <svg class="w-12 h-12">
+                            <use href="#map-pin" class="text-brown-600"></use>
+                        </svg>
+                        <span class="text-3xl font-MorabbaBold ">
+                                آدرس های من
+                            </span>
+                    </div>
+                    <span class="text-lg"> در این بخش میتوانید ادرس های خود را مدیریت کنید</span>
+                </div>
+            </div>
+            {# left #}
+            <div class="flex items-center gap-x-3 px-5 py-3 bg-brown-600 rounded-xl">
+                <svg class="w-6 h-6">
+                    <use href="#plus"></use>
+                </svg>
+                <a href="{% url 'address:address-create' %}" class="font-Dana">ثبت آدرس جدید</a>
+            </div>
+        </div>
+
+        {#main#}
+
+        {% for address in addresses %}
+
+            <div class="flex items-center justify-between bg-blue-950/30 px-8 py-4 rounded-xl">
+                {# right #}
+                <div class="flex items-center gap-x-12">
+                    <div>
+                        <svg class="w-8 h-8">
+                            <use href="#home"></use>
+                        </svg>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <span class="text-lg">{{ address.full_name }}</span>
+                        <span>{{ address.phone_number }}</span>
+                        <span>{{ address.address }}</span>
+                        <div>
+                            <span>کد پستی : </span>
+                            <span>{{ address.zip_code }}</span>
+                        </div>
+                    </div>
+                </div>
+                {# left #}
+                <div class="flex items-center gap-x-15">
+                    {% if address.is_default %}
+                        <button class="flex items-center gap-x-2">
+                            <span class="block w-2 h-2 rounded-full bg-green-700"></span>
+                            <span>آدرس پیشفرض</span>
+                        </button>
+                    {% else %}
+                        <button type="submit" onclick="setDefaultAddress({{ address.id }})" class="block bg-gray-700/50 rounded-lg px-6 py-2.5">
+                            تعیین به عنوان پیشفرض
+                        </button>
+                    {% endif %}
+
+
+                    <div class="flex items-center gap-x-2">
+                        <a  href="{% url 'address:address-edit' pk=address.id %}" class="block bg-gray-700/50 rounded-lg px-4 py-2 hover:bg-yellow-500 transition-colors">
+                            <svg class="w-6 h-6">
+                                <use href="#pencil"></use>
+                            </svg>
+                        </a>
+                        <button type="submit" onclick="deleteAddress({{ address.id }})"
+                                class="block bg-gray-700/50 rounded-lg hover:bg-red-800 px-4 py-2 transition-colors">
+                            <svg class="w-6 h-6">
+                                <use href="#trash"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    <span class=""> اطلاعات ادرس شما محفوظ و امن نگهداری میشود و فقط برای ارسال سفارشات خواهد بود</span>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+        <script src="{% static 'src/js/address.js' %}"></script>
+{% endblock %}
+
+</body>

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+<body class="font-Dana bg-gray-100 dark:bg-zinc-800">
+
+{% block header %}
+	
+{% endblock %}
+
+{% block content %}
+    <div id="cart-data"
+            data-increase-url="{% url 'cart:session-increase-product' %}"
+            data-decrease-url="{% url 'cart:session-decrease-product' %}"
+            data-remove-url="{% url 'cart:session-remove-product' %}"
+            data-add-to-order-url="{% url 'orders:order_create' %}"
+            data-csrf-token="{{ csrf_token }}"
+            class="mx-auto min-h-screen py-8 font-Dana"
+    >
+
+        <div class="w-[80%] mx-auto flex items-start justify-between gap-x-5">
+            <!-- cart items -->
+            <div class="w-[60%] flex flex-col items-center gap-y-4 text-white font-Dana rounded-2xl ">
+                <!-- item -->
+                {% for product in cart_items %}
+
+                    <div class="flex items-center gap-x-3.5 w-full p-5 bg-zinc-700 rounded-2xl">
+                        <div class="w-28 h-28 rounded-lg flex items-center justify-center">
+                            <img src="{{ product.product_obj.image.url }}" class="w-24 h-24" alt="">
+                        </div>
+                        <div class="flex items-center justify-between w-full">
+                            <div class="flex flex-col items-start gap-y-4">
+                                <h2 class="text-xl">{{ product.product_obj.title }}</h2>
+                                <span class="textgra">{{ product.product_obj.price }}  تومان</span>
+                                <div class="flex items-center bg-zinc-900 rounded-lg">
+                                    <button type="button" onclick="increaseProduct({{ product.product_obj.id }})"
+                                            class="w-10 h-10 flex items-center justify-center  text-xl hover:bg-gray-100">
+                                        +
+                                    </button>
+
+                                    <span class="w-12 h-10 flex items-center justify-center ">
+                                    {{ product.quantity }}
+                                </span>
+                                    {% if product.quantity == 1 %}
+                                        <button class="w-10 h-10 flex items-center justify-center  text-xl hover:bg-gray-100">
+                                            <svg onclick="removeProduct({{ product.product_obj.id }})" class="w-5 h-5">
+                                                <use href="#trash"></use>
+                                            </svg>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" onclick="decreaseProduct({{ product.product_obj.id }})"
+                                                class="w-10 h-10 flex items-center justify-center  text-xl hover:bg-gray-100">
+                                            -
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="flex items-end gap-x-1">
+
+                                <span class="text-lg text-gray-400">جمع قیمت : </span>
+                                <span class="text-lg">{{ product.total_price }}</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                {% empty %}
+
+                    <h1 class="text-2xl text-red-500 mt-0 mb-0 my-auto"> سبد خرید شما خالی است </h1>
+
+                {% endfor %}
+
+            </div>
+
+            {% if cart_items %}
+
+
+                <!-- cart summery -->
+                <div class="w-[40%] text-white bg-zinc-700 rounded-2xl p-5 space-y-8">
+                    <!-- head -->
+                    <h2 class="font-DanaDemiBold text-2xl">خلاصه سفارش</h2>
+                    <!-- body -->
+                    <div class="flex flex-col gap-y-5">
+                        <div class="flex items-center justify-between">
+                            <h4>تعداد محصولات</h4>
+                            <span>{{ total_quantity }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <h4>قیمت محصولات</h4>
+                            <span>{{ total_payment_price }}</span>
+                        </div>
+{#                        <div class="flex items-center justify-between">#}
+{#                            <h4>هزینه ارسال</h4>#}
+{#                            <span>100</span>#}
+{#                        </div>#}
+{#                        <div class="flex items-center justify-between">#}
+{#                            <h4>جمع سفارش</h4>#}
+{#                            <span class="text-3xl text-emerald-500">باید با ادرس جمع بشه</span>#}
+{#                        </div>#}
+                    </div>
+                    <!-- footer -->
+                    <div class="flex items-center justify-between">
+
+                        <a href="{% url 'shop:product_grid' %}"
+                           class="bg-emerald-500 text-white rounded-2xl flex-center shrink-0 w-50 h-10">ادامه خرید</a>
+
+                        <form action="{% url 'orders:order_create' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="bg-emerald-500 text-white rounded-2xl flex-center shrink-0 w-50 h-10">ثبت
+                                سفارش
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            {% else %}
+
+                <h1 class="text-2xl text-blue-400">سبد خرید خودتو با چیزای جورواجور پر کن</h1>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+        <script src="{% static 'src/js/cart.js' %}"></script>
+
+{% endblock %}
+
+</body>
+

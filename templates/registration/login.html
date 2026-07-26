@@ -1,0 +1,202 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title>Document</title>
+</head>
+<body>
+    <section
+  class="min-h-screen bg-[#0b0f14] flex items-center justify-center px-4 py-10 relative overflow-hidden"
+>
+
+  <!-- Background Blur -->
+
+  <div
+    class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 blur-[150px] rounded-full"
+  ></div>
+
+  <div
+    class="absolute bottom-0 left-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full"
+  ></div>
+
+  <!-- Login Card -->
+
+  <div
+    class="w-full max-w-md bg-[#111827]/80 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 shadow-2xl relative z-10"
+  >
+
+    <!-- Logo -->
+
+    <div class="text-center mb-8">
+
+      <img
+        src="/static/images/logo.svg"
+        alt=""
+        class="h-14 mx-auto mb-4"
+      >
+
+      <h1
+        class="text-2xl font-bold text-white mb-2"
+      >
+        ورود به حساب کاربری
+      </h1>
+
+      <p class="text-zinc-400 text-sm">
+        اطلاعات خود را وارد کنید
+      </p>
+
+    </div>
+
+    <!-- Mobile -->
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="mb-5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <!-- Email -->
+    <div class="mb-5">
+        <label class="block text-zinc-300 text-sm mb-2">
+            ایمیل
+        </label>
+
+        <input
+            type="email"
+            name="username"
+            value="{{ form.username.value|default:'' }}"
+            placeholder="ایمیل خود را وارد کنید"
+            class="w-full h-14 rounded-xl bg-[#0f172a] border border-zinc-700 px-4 text-white outline-none focus:border-emerald-500 transition"
+        >
+
+        {% if form.username.errors %}
+            <div class="mt-2 text-sm text-red-400">
+                {{ form.username.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Password -->
+    <div class="mb-5">
+        <label class="block text-zinc-300 text-sm mb-2">
+            رمز عبور
+        </label>
+
+        <div class="relative">
+            <input
+                type="password"
+                name="password"
+                placeholder="رمز عبور"
+                class="w-full h-14 rounded-xl bg-[#0f172a] border border-zinc-700 px-4 text-white outline-none focus:border-emerald-500 transition"
+            >
+        </div>
+
+        {% if form.password.errors %}
+            <div class="mt-2 text-sm text-red-400">
+                {{ form.password.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Options -->
+    <div class="flex justify-between items-center mb-6 text-sm">
+        <label class="flex items-center gap-2 text-zinc-400">
+            <input
+                type="checkbox"
+                name="remember_me"
+                class="accent-emerald-500"
+            >
+            مرا به خاطر بسپار
+        </label>
+
+        <a
+            href="{% url 'password_reset' %}"
+            class="text-emerald-400 hover:text-emerald-300"
+        >
+            فراموشی رمز؟
+        </a>
+    </div>
+
+    <!-- Login -->
+    <button
+        type="submit"
+        class="w-full h-14 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold hover:opacity-90 transition"
+    >
+        ورود
+    </button>
+</form>
+
+
+
+    <!-- Divider -->
+
+    <div
+      class="flex items-center gap-4 my-8"
+    >
+
+      <div class="flex-1 h-px bg-zinc-700"></div>
+
+      <span class="text-zinc-500 text-sm">
+        یا
+      </span>
+
+      <div class="flex-1 h-px bg-zinc-700"></div>
+
+    </div>
+
+    <!-- Social Login -->
+
+    <div class="grid grid-cols-3 gap-3">
+
+      <button
+        class="h-12 rounded-xl bg-[#0f172a] border border-zinc-700 text-white"
+      >
+        Google
+      </button>
+
+      <button
+        class="h-12 rounded-xl bg-[#0f172a] border border-zinc-700 text-white"
+      >
+        Github
+      </button>
+
+      <button
+        class="h-12 rounded-xl bg-[#0f172a] border border-zinc-700 text-white"
+      >
+        Apple
+      </button>
+
+    </div>
+
+    <!-- Register -->
+
+    <div
+      class="text-center mt-8 text-sm text-zinc-400"
+    >
+
+      حساب کاربری ندارید؟
+
+      <a
+        href="#"
+        class="text-emerald-400 mr-2"
+      >
+        ثبت نام کنید
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+</body>
+</html>
+
+
+
+
+

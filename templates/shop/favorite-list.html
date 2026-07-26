@@ -1,0 +1,150 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>علاقه مندی ها</title>
+    {% tailwind_css %}
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css"
+        rel="stylesheet">
+</head>
+
+<body class="bg-[#0d1117]">
+
+    <div class="w-[1200px] font-Dana mx-auto min-h-screen bg-[#0f141b]">
+
+        <!-- Header -->
+
+        <header
+            class="h-20 border-b border-[#1d2430] px-5 flex items-center justify-between">
+
+            <div class="flex items-center gap-4 text-white">
+
+                <button>
+                    <i class="ri-search-line text-xl"></i>
+                </button>
+
+                <button class="relative">
+
+                    <i class="ri-shopping-cart-line text-xl"></i>
+
+                    <span
+                        class="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full">
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div class="text-center">
+
+                <h2 class="text-amber-400 font-bold text-sm">
+                    گالری قهوه
+                </h2>
+
+                <p class="text-[10px] text-zinc-500">
+                    coffee gallery
+                </p>
+
+            </div>
+
+            <button>
+                <i class="ri-menu-line text-white text-xl"></i>
+            </button>
+
+        </header>
+
+        <!-- Page Title -->
+
+        <section class="px-5 pt-6 pb-3">
+
+            <h1 class="text-white text-2xl font-bold">
+                علاقه مندی ها
+            </h1>
+
+            <div
+                class="flex items-center gap-2 text-xs text-zinc-500 mt-2">
+
+                <span>خانه</span>
+
+                <span>/</span>
+
+                <span>علاقه مندی ها</span>
+
+            </div>
+
+        </section>
+
+        <!-- Products -->
+
+        <section class="px-4 pb-10">
+
+            <div class="grid grid-cols-3 gap-3">
+
+                <!-- Card 1 -->
+
+
+                {% for product in product_obj %}
+
+                <div
+                    class="bg-[#161d27] rounded-2xl p-3 shadow-lg h-full">
+
+                    <div class="flex justify-between">
+
+                        <i
+                            class="ri-heart-fill text-red-500 text-lg"></i>
+
+                    </div>
+
+                    <a href="{% url 'shop:product-detail' slug=product.slug %}" class="flex justify-center items-center h-28">
+                        <img src="{{ product.image.url }}" alt="" class="h-24 object-contain">
+                    </a>
+
+                    <h3 class="font-Dana text-white text-xl text-center leading-5">
+                        {{ product.title }}
+                    </h3>
+
+                    <p
+                        class="text-zinc-500 text-lg text-center mt-3">
+
+                        250 گرم
+
+                    </p>
+
+                    <div
+                        class="text-emerald-400 text-center font-DanaDemiBold text-xl mt-4">
+
+                        {{ product.price }}
+
+                    </div>
+
+                    <button
+                        class="w-full mt-4 border border-emerald-500 text-emerald-400 rounded-lg py-2 text-lg hover:bg-emerald-500 hover:text-black duration-300">
+
+                        افزودن به سبد خرید
+
+                    </button>
+
+                </div>
+
+                {% empty %}
+
+                    <h1>هیچ محصولی در سبد علاقه مندی شما نیست</h1>
+
+                {% endfor %}
+                
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% tailwind_css %}
+</head>
+<body>
+    <section
+  class="min-h-screen bg-[#0b0f14] flex items-center justify-center px-4 py-10 relative overflow-hidden"
+>
+
+  <!-- Background Effects -->
+
+  <div
+    class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 blur-[150px] rounded-full"
+  ></div>
+
+  <div
+    class="absolute bottom-0 left-0 w-96 h-96 bg-green-500/10 blur-[150px] rounded-full"
+  ></div>
+
+  <!-- Register Card -->
+
+  <div
+    class="w-full max-w-2xl bg-[#111827]/80 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 shadow-2xl relative z-10"
+  >
+
+    <!-- Logo -->
+
+    <div class="text-center mb-8">
+
+      <img
+        src="{% static 'public/images/' %}"
+        alt=""
+        class="h-14 mx-auto mb-4"
+      >
+
+      <h1 class="text-2xl font-bold text-white">
+        ایجاد حساب کاربری
+      </h1>
+
+      <p class="text-zinc-400 mt-2 text-sm">
+        اطلاعات خود را وارد نمایید
+      </p>
+
+    </div>
+
+    <!-- Form -->
+
+    <form method="post" action="" class="space-y-5">
+      {% csrf_token %}
+      <!-- Row 1 -->
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+{#        <div>#}
+{#          <label class="block text-zinc-300 mb-2 text-sm">#}
+{#            نام#}
+{#          </label>#}
+{##}
+{#          <input#}
+{#            type="text"#}
+{#            placeholder="مهدی"#}
+{#            class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"#}
+{#          >#}
+{#        </div>#}
+{##}
+{#        <div>#}
+{#          <label class="block text-zinc-300 mb-2 text-sm">#}
+{#            نام خانوادگی#}
+{#          </label>#}
+{##}
+{#          <input#}
+{#            type="text"#}
+{#            placeholder="محمدی"#}
+{#            class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"#}
+{#          >#}
+{#        </div>#}
+
+      </div>
+
+      <!-- Mobile -->
+
+{#      <div>#}
+{##}
+{#        <label class="block text-zinc-300 mb-2 text-sm">#}
+{#          شماره موبایل#}
+{#        </label>#}
+{##}
+{#        <input#}
+{#          type="text"#}
+{#          name="PhoneNumber"#}
+{#          placeholder="09121234567"#}
+{#          class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"#}
+{#        >#}
+{##}
+{#      </div>#}
+
+      <!-- Email -->
+
+      <div>
+
+        <label class="block text-zinc-300 mb-2 text-sm">
+          ایمیل
+        </label>
+
+        <input
+          type="email"
+          name="email"
+          placeholder="example@gmail.com"
+          class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"
+        >
+
+      </div>
+
+      <!-- Passwords -->
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div>
+
+          <label class="block text-zinc-300 mb-2 text-sm">
+            رمز عبور
+          </label>
+
+          <input
+            type="password"
+            name="password1"
+            placeholder="رمز عبور"
+            class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"
+          >
+
+        </div>
+
+        <div>
+
+          <label class="block text-zinc-300 mb-2 text-sm">
+            تکرار رمز عبور
+          </label>
+
+          <input
+            type="password"
+            name="password2"
+            placeholder="تکرار رمز عبور"
+            class="w-full h-14 bg-[#0f172a] border border-zinc-700 rounded-xl px-4 text-white outline-none focus:border-emerald-500"
+          >
+
+        </div>
+
+      </div>
+
+      <!-- Terms -->
+
+      <label
+        class="flex items-center gap-3 text-sm text-zinc-400"
+      >
+
+        <input
+          type="checkbox"
+          class="accent-emerald-500"
+        >
+
+        <span>
+          قوانین و مقررات سایت را می‌پذیرم
+        </span>
+
+      </label>
+
+      <!-- Button -->
+
+      <button
+        type="submit"
+        class="w-full h-14 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold hover:opacity-90 transition"
+      >
+        ثبت نام
+      </button>
+
+      <!-- Login Link -->
+
+      <div
+        class="text-center text-sm text-zinc-400"
+      >
+
+        قبلاً حساب کاربری دارید؟
+
+        <a
+          href="{% url 'login' %}" class="text-emerald-400 mr-1"
+        >
+          وارد شوید
+        </a>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,41 @@
+
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% tailwind_css %}
+
+</head>
+
+
+<body class="bg-zinc-900">
+    {% block icons %}
+        {% include 'includes/icons.html' %}
+    {% endblock %}
+
+    {% block header %}
+    	{% include "includes/static_header.html" %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block footer %}
+    	{% include "includes/footer.html" %}
+    {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    {% block js %}
+        <script src="{% static 'src/js/main.js' %}"></script>
+        <script src="{% static 'src/js/address.js' %}"></script>
+        <script src="{% static 'src/js/cart.js' %}"></script>
+    {% endblock %}
+
+</body>
+
+
+</html>

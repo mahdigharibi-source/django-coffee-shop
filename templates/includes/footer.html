@@ -1,0 +1,127 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% tailwind_css %}
+</head>
+<body>
+
+<footer class="relative bg-zinc-700  py-8 md:py-11 md:pt-[62px] font-Dana">
+    <div class="w-[70%] lg:w-[90%] mx-auto px-4 md:px-0">
+        <!-- top -->
+        <div class="flex flex-wrap items-center justify-between">
+
+            <div>
+                <div class="flex gap-x-5 mb-6 md:mb-[18px]">
+                    <svg class="w-[57px] h-[54px] text-gray-300">
+                        <use href="#logo"></use>
+                    </svg>
+                    <svg class="w-[138px] h-[54px] text-gray-300">
+                        <use href="#logo-type"></use>
+                    </svg>
+                </div>
+                <p class="lg:max-w-[606px] text-lg md:text-xl/[48px] text-gray-300">ما برانیم تا با پیشرو بودن در
+                    فرایند تولید نوع و کیفیت محصول خدمات و توضیع الگویی برای تولیدکنندگان ایرانی باشیم و به مرجع
+                    قهوه در ایران تبدیل شویم . میپنداریم که نظر مردم ایران و منطقه باید نسبت به کالای ایرانی بهبود
+                    یابد و در این راستا با اشتیاق میکوشیم</p>
+            </div>
+
+
+            <div class="text-white md:text-xl mt-10 md:mt-[26px]">
+                <h4 class="font-DanaDemiBold text-2xl text-white mb-6 md:mb-7">دسترسی سریع</h4>
+                <div class="flex gap-x-10 md:gap-x-16">
+                    <div class="flex flex-col gap-y-2.5 md:gap-y-5">
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            حریم خصوصی
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            عودت کالا
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            شرایط استفاده
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            ثبت سفارش
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-y-2.5 md:gap-y-5">
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            پرسش های متداول
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            فرصت های شغلی
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            ضمانت نامه ها
+                        </div>
+                        <div class="hover:text-orange-300">
+                            <span class="footer"></span>
+                            ارتباط با ما
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-white text-base md:text-xl mt-10 md:mt-[26px]">
+                <h4 class="font-DanaDemiBold text-2xl text-white mb-6 md:mb-7">در تماس باشیم</h4>
+                <div class="mb-6 md:mb-10">
+                        <span class="flex flex-wrap items-center gap-x-2 md:gap-x-3 mb-4 md:mb-5">
+                            <svg class="w-5 h-5 md:w-6 md:h-6">
+                                <use href="#map-pin"></use>
+                            </svg>
+                            بلوار میرداماد خیابان البرز کوچه قبادیان شرقی پلاک 3
+                        </span>
+                    <div class="flex flex-wrap items-center gap-x-4 md:gap-x-5 gap-y-4">
+                            <span class="flex items-center gap-x-2 md:gap-x-3 text-orange-300">
+                                <svg class="w-5 h-5 md:w-6 md:h-6">
+                                    <use href="#envelope"></use>
+                                </svg>
+                                info@Coffee.com
+                            </span>
+
+                        <span class="flex items-center gap-x-2 md:gap-x-3">
+                                <svg class="w-5 h-5 md:w-6 md:h-6">
+                                    <use href="#phone"></use>
+                                </svg>
+                                <span class="ltr-text">0916 221 7039</span>
+                            </span>
+
+                        <span class="ltr-text">
+                                021 - 6879012
+                            </span>
+                    </div>
+                </div>
+                <div class="ltr-text flex items-center gap-x-1.5 md:gap-x-6 font-DanaMedium md:text-xl">
+                    <a href="#"
+                       class="flex items-center justify-center flex-grow gap-x-2 h-12 border rounded-xl text-zinc-700 bg-gradient-to-r from-orange-200/80 to-orange-300/80">
+                        @golden_coffee
+                        <svg class="w-[26px] h-[26px] md:w-[38px] md:h-[38px]">
+                            <use href="#telegram"></use>
+                        </svg>
+                    </a>
+                    <a href=""
+                       class="flex items-center justify-center flex-grow gap-x-2 border border-orange-200 text-orange-200 h-12 rounded-xl">
+                        @golden_coffee
+                        <svg class="w-[26px] h-[26px] md:w-[38px] md:h-[38px]">
+                            <use href="#instagram"></use>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- down -->
+    </div>
+</footer>
+</body>
+</html>
