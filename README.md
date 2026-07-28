@@ -77,26 +77,11 @@ Some of its notable implementations include:
 * 📱 Fully Responsive UI
 * 🏗 Clean Django Architecture
 
----
-
-# 📸 Preview
-
-> Screenshots will be added soon.
-
-| Home                      | Product                      |
-| ------------------------- | ---------------------------- |
-| ![](screenshots/home.png) | ![](screenshots/product.png) |
-
-| Cart                      | Checkout                     |
-| ------------------------- |------------------------------|
-| ![](screenshots/cart.png) | ![](screenshots/address.png) |
-
 
 ---
 
 # 🚀 Features
 
-# 🚀 Features
 
 BeanCraft is designed around real-world e-commerce workflows rather than simple CRUD operations. Each module has a specific responsibility and is built to provide a scalable and maintainable architecture.
 
@@ -274,9 +259,6 @@ Create Order
 ## 🏗 Architecture
 
 
-
-# 🏗 Architecture
-
 BeanCraft follows a modular architecture where each application is responsible for a specific business domain. This separation of concerns keeps the project maintainable, scalable, and easy to extend as new features are introduced.
 
 The following diagram illustrates the high-level workflow of the application.
@@ -360,11 +342,6 @@ Several user interactions are handled asynchronously using AJAX, including:
 
 Reducing full page reloads improves responsiveness and overall usability.
 
-
-
-
-
- # 💡 Engineering Decisions)
 
 
 
