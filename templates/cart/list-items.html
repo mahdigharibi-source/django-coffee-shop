@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-<body class="font-Dana bg-gray-100 dark:bg-zinc-800">
+<body class="font-Dana">
 
 {% block header %}
-	
+    {% include 'includes/static_header.html' %}
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
             data-remove-url="{% url 'cart:session-remove-product' %}"
             data-add-to-order-url="{% url 'orders:order_create' %}"
             data-csrf-token="{{ csrf_token }}"
-            class="mx-auto min-h-screen py-8 font-Dana"
+            class="products mx-auto min-h-screen font-Dana"
     >
 
         <div class="w-[80%] mx-auto flex items-start justify-between gap-x-5">
