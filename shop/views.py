@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import FieldError
 from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView, TemplateView
 from cart.cart import CartSession
 from shop.forms import CommentsForm
@@ -31,6 +31,13 @@ class ProductListView(ListView):
                 pass
 
         return queryset
+
+    def post(self, request, *args, **kwargs):
+        search_q = self.request.POST.get('q')
+        if search_q:
+            products = Product.objects.filter(title__icontains=search_q)
+            return render(request, 'shop/product-list.html', context={'products': products})
+        return render(request, "shop/product-list.html")
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
