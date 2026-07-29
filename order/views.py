@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Sum, Q
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, CreateView, TemplateView
@@ -18,7 +19,17 @@ class OrderListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order_items'] = OrderItem.objects.filter(order__user=self.request.user).select_related("product")
+        user_orders = Order.objects.filter(user=self.request.user)
+        status = user_orders.aggregate(total=Count('id'),
+                                pending=Count('id', filter=Q(status="PENDING")),
+                                paid=Count('id', filter=Q(status="PAID")),
+                                shipped=Count('id', filter=Q(status="SHIPPED")),
+                                delivered=Count('id', filter=Q(status="DELIVERED")),
+                                canceled=Count('id', filter=Q(status="CANCELED")),
+                                expired=Count('id', filter=Q(status="EXPIRED")),
+                            )
+        context['orders'] = user_orders.annotate(item_count=Sum('order_items__quantity')).prefetch_related("order_items__product").select_related("discount")
+        context['stat'] = status
         return context
 
 

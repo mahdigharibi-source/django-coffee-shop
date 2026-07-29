@@ -1,106 +1,304 @@
-{% extends 'base.html' %}
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+
+    <title>Document</title>
+</head>
+
+<body class="max-w-[80%] mx-auto my-8 bg-zinc-900 font-Dana text-white">
+    <svg class="hidden">
+        <symbol id="shopping-bag" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </symbol>
+        <symbol id="cube" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+        </symbol>
+        <symbol id="wallet" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+        </symbol>
+        <symbol id="truck" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+        </symbol>
+        <symbol id="chat-bubble-left-ellipsis" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+        </symbol>
+        <symbol id="calendar-days" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+        </symbol>
+        <symbol id="gift" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+        </symbol>
+        <symbol id="check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </symbol>
+        <symbol id="banknotes" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+        </symbol>
+        <symbol id="home" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+        </symbol>
+        <symbol id="arrow-trending-up" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+        </symbol>
 
 
-{% block content %}
-    <main class="max-w-6xl mx-auto px-4 py-10 bg-zinc-900 ">
 
-        <!-- Title -->
-        <div class="mb-10">
 
-            <h1 class="text-4xl font-bold text-white">
-                سفارش های من
-            </h1>
 
-            <div class="flex items-center gap-2 mt-3 text-sm">
-                <span class="text-zinc-500">خانه</span>
-                <span class="text-zinc-600">/</span>
-                <span class="text-emerald-500">
-                    سفارش های من
-                </span>
-            </div>
 
+
+    </svg>
+
+    <main>
+        <!-- order title -->
+        <div class="flex flex-col items-start gap-y-5">
+            <h1 class="font-MorabbaBold text-2xl">سفارش های من</h1>
+            <p>تمام سفارش های ثبت شده شما در این قسمت قابل مشاهده است</p>
         </div>
+        <div class="flex gap-x-10">
+            <!-- right -->
+            <div class="w-full mt-8">
 
-        <!-- Tabs -->
-        <div class="flex gap-8 border-b border-zinc-800 mb-8 overflow-x-auto">
+                <!-- order summary -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-x-5">
+                        <div class="flex flex-col items-center gap-y-3">
+                            <span>مجموع خرید</span>
+                            <span>58,000,000</span>
+                            <span>تومان</span>
+                        </div>
+                        <svg class="w-10 h-10">
+                            <use href="#arrow-trending-up"></use>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-x-5">
+                        <div class="flex flex-col items-center gap-y-3">
+                            <span>تحویل شده</span>
+                            <span>7</span>
+                            <span>سفارش</span>
+                        </div>
+                        <svg class="w-10 h-10">
+                            <use href="#cube"></use>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-x-5">
+                        <div class="flex flex-col items-center gap-y-3">
+                            <span>در حال ارسال</span>
+                            <span>3</span>
+                            <span>سفارش</span>
+                        </div>
+                        <svg class="w-10 h-10">
+                            <use href="#truck"></use>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-x-5">
+                        <div class="flex flex-col items-center gap-y-3">
+                            <span>در انتظار پرداخت</span>
+                            <span>2</span>
+                            <span>سفارش</span>
+                        </div>
+                        <svg class="w-10 h-10">
+                            <use href="#wallet"></use>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-x-5">
+                        <div class="flex flex-col items-center gap-y-3">
+                            <span>کل سفارش ها</span>
+                            <span>12</span>
+                            <span>سفارش</span>
+                        </div>
+                        <svg class="w-10 h-10">
+                            <use href="#shopping-bag"></use>
+                        </svg>
+                    </div>
+                </div>
+                <!-- order status -->
+                <div class="flex gap-x-8 py-5 mt-8">
+                    <button class=" bg-zinc-500/20 hover:bg-green-700 px-9 py-3 rounded-lg">همه</button>
+                    <button class=" bg-zinc-500/20 hover:bg-orange-500 px-9 py-3 rounded-lg">در انتظار پرداخت</button>
+                    <button class=" bg-zinc-500/20 hover:bg-pink-400 px-9 py-3 rounded-lg">درحال ارسال</button>
+                    <button class=" bg-zinc-500/20 hover:bg-blue-700 px-9 py-3 rounded-lg">تحویل شده</button>
+                    <button class=" bg-zinc-500/20 hover:bg-red-700 px-9 py-3 rounded-lg">لغو شده</button>
+                </div>
+                <!-- orders information -->
+                {% for order in orders %}
+                    <div class="flex flex-col bg-blue-950/20 p-5">
 
-            <a class="pb-4 text-emerald-500 border-b-2 border-emerald-500 whitespace-nowrap">
-                همه
-            </a>
+                    <!-- top -->
+                    <div class="flex justify-between gap-x-10">
+                        <!-- right -->
+                        <div class="flex justify-between min-w-[400px]">
+                            <div class="flex flex-col">
+                                <div class="text-xl font-DanaMedium flex items-center gap-x-3">
+                                    <span>سفارش</span>
+                                    <span>#{{ order.id }}</span>
+                                </div>
+                                <div class="flex items-center gap-x-1.5 mt-5 text-zinc-500">
+                                    <svg class="w-5 h-5">
+                                        <use href="#calendar-days"></use>
+                                    </svg>
+                                    <span>ثبت شده در</span>
+                                    <span>{{ order.created_at }}</span>
+                                </div>
+                            </div>
+                            <div>
+                            
+                            
+                            
+                                {% if stat.pending %}
+                                	<button
+                                    class="flex items-center gap-x-2 px-8 h-11 bg-orange-500/40 text-orange-600 rounded-xl">
+                                    <svg class="w-6 h-6">
+                                        <use href="#wallet"></use>
+                                    </svg>
+                                    <span class="">{{ order.status }}</span>
+                                    
+                                    </button>
+                                {% endif %} 
+                                {% if stat.delivered %}
+                                	<button
+                                    class="flex items-center gap-x-2 px-8 h-11 bg-green-500/30 text-green-600 rounded-xl">
+                                    <svg class="w-6 h-6">
+                                        <use href="#check"></use>
+                                    </svg>
+                                    <span class="">{{ order.status }}</span>
 
-            <a class="pb-4 text-zinc-400 hover:text-white whitespace-nowrap">
-                در انتظار پرداخت
-            </a>
+                                    </button>
+                                {% endif %}
+                                {% if stat.shipped %}
+                                	<button
+                                    class="flex items-center gap-x-2 px-8 h-11 bg-indigo-500/20 text-indigo-600 rounded-xl">
+                                    <svg class="w-6 h-6">
+                                        <use href="#truck"></use>
+                                    </svg>
+                                    <span class="">{{ order.status }}</span>
 
-            <a class="pb-4 text-zinc-400 hover:text-white whitespace-nowrap">
-                در حال ارسال
-            </a>
+                                    </button>
+                                {% endif %} 
 
-            <a class="pb-4 text-zinc-400 hover:text-white whitespace-nowrap">
-                تکمیل شده
-            </a>
-
-            <a class="pb-4 text-zinc-400 hover:text-white whitespace-nowrap">
-                لغو شده
-            </a>
-
-        </div>
-
-        <!-- Orders -->
-        <div class="space-y-5">
-
-            {% for order_item in order_items %}
-
-                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5 flex items-center justify-between">
-
-                    <div class="flex items-center gap-5">
-
-                        <div class="w-2 self-stretch bg-amber-500 rounded-full">
+                            
+                            
+                            
+                            
+                            </div>
                         </div>
 
-                        <img src="{{ order_item.product.image.url }}" alt="" class="w-24 h-24 object-contain">
+                        <!-- left -->
+                        <div class="flex items-center justify-between min-w-[400px]">
+                            <div class="flex items-center gap-x-5">
+                                <svg class="w-9 h-9">
+                                    <use href="#cube"></use>
+                                </svg>
+                                <div class="flex flex-col gap-y-3">
+                                    <div>
+                                        <span>{{ order.item_count }}</span>
+                                        <span>محصول</span>
+                                    </div>
+                                    <span>تعداد محصولات</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-y-3">
+                                <div>
+                                    <span class="text-lg">{{ order.final_price }}</span>
+                                    <span>تومان</span>
+                                </div>
+                                <span>مبلغ پرداختی</span>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- footer -->
+                    <div class="mt-8">
+                        <!-- right -->
+                        <div class="flex items-center gap-x-5">
+                            {% for item in order.order_items.all %}
+                            	<div class="flex-center w-20 h-20 border-white/20">
+                                <img src="{{ item.product.image.url }}" class="w-18 h-18" alt="">
+                                </div>
+                            {% endfor %}
+
+
+                        </div>
+                        <!-- left -->
                         <div>
 
-                            <h3 class="text-white text-xl font-bold">
-                                {{ order_item.product.title }}
-                            </h3>
-
-                            <p class="text-zinc-500 mt-2">
-                                {{ order_item.order.tracking_code }}
-                            </p>
-
-                            <p class="text-zinc-400 mt-2">
-                                ۵ روز دیگر تحویل
-                            </p>
-
                         </div>
-
                     </div>
-
-                    <div class="text-center">
-
-                        <p class="text-zinc-500 mb-2">
-                            مبلغ سفارش
-                        </p>
-
-                        <p class="text-amber-400 text-2xl font-bold">
-                            {{ order_item.total_price }}
-                        </p>
-
-                    </div>
-
-                    <button class="w-32 h-12 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white transition">
-
-                        جزئیات
-
-                    </button>
-
                 </div>
+                {% endfor %}
+            </div>
+            <!-- left -->
 
-            {% endfor %}
+            	<div class="w-[30%] mt-10 flex flex-col space-y-10">
+                <!-- order summary -->
+                <div class="">
+                    <h1 class="text-xl mb-6">خلاصه سفارش ها</h1>
+                    <div class="flex flex-col gap-y-6 text-xl">
+                        <div class="flex items-center justify-between">
+                            <span>همه سفارش ها</span>
+                            <span>{{ orders.count }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>در انتظار پرداخت</span>
+                            <span>{{ stat.pending }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>درحال ارسال</span>
+                            <span>{{ stat.shipped }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>تحویل شده</span>
+                            <span>{{ stat.delivered }}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>لغو شده</span>
+                            <span>{{ stat.canceled }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- support -->
+                <div class="flex flex-col space-y-5">
+                    <h1 class="text-xl font-MorabbaBold">نیاز به کمک دارید</h1>
+                    <p>اگر سوالی در ارتباط با سفارش هایتان دارید میتوانید با پشتیبانی در ارتباط باشید</p>
+                    <button class="bg-emerald-700 py-2.5 px-4 rounded-xl">
+                        ارتباط با پشتیبانی
+                    </button>
+                </div>
+            </div>
+
+
         </div>
 
-    </main>
-{% endblock %}
 
+    </main>
+
+</body>
+
+</html>

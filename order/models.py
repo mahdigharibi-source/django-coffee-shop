@@ -157,6 +157,8 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="order_items")
     price = models.DecimalField(max_digits=10, decimal_places=0)
     quantity = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     # price for each item
     @property
     def total_price(self):
