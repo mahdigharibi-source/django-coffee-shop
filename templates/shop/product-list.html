@@ -19,11 +19,11 @@
 <div class="font-Dana bg-gray-100 dark:bg-zinc-800 mb-12">
     {% block header %}
         <header id="cart-data"
-            data-add-to-favorite-url="{% url 'shop:add_favorite' %}"
-            data-add-to-cart-url="{% url 'cart:session-add-product' %}"
-            data-add-to-order-url="{% url 'orders:order_create' %}"
-            data-login-url="{% url 'login' %}"
-            data-csrf-token="{{ csrf_token }}"
+                data-add-to-favorite-url="{% url 'shop:add_favorite' %}"
+                data-add-to-cart-url="{% url 'cart:session-add-product' %}"
+                data-add-to-order-url="{% url 'orders:order_create' %}"
+                data-login-url="{% url 'login' %}"
+                data-csrf-token="{{ csrf_token }}"
                 class="fixed top-9 right-0 left-0 z-20 hidden md:flex items-center w-[98%] lg:w-[90%] h-24 px-5 lg:px-10 py-5 mx-auto bg-black/50 rounded-3xl backdrop-blur-[6px]">
             <!-- menu & icon -->
             <div class="flex justify-between w-full">
@@ -96,27 +96,28 @@
                                     <div
                                             class="pb-1 border-b border-b-gray-300 dark:border-white/10 divide-y divide-gray-300 dark:divide-white/10 child:py-5 max-h-[350px] overflow-y-auto">
 
-                                    {% for item in cart_items %}
+                                        {% for item in cart_items %}
 
-                                        <div class="flex gap-x-2.5">
-                                            <img src="{{ item.product_obj.image.url }}" class="w-30 h-30"
-                                                 alt="product 1">
-                                            <div class="flex flex-col justify-between">
-                                                <h4 class="font-DanaMedium text-zinc-700 dark:text-white text-base">قهوه
-                                                    {{ item.product_obj.title }}</h4>
-                                                <div>
+                                            <div class="flex gap-x-2.5">
+                                                <img src="{{ item.product_obj.image.url }}" class="w-30 h-30"
+                                                     alt="product 1">
+                                                <div class="flex flex-col justify-between">
+                                                    <h4 class="font-DanaMedium text-zinc-700 dark:text-white text-base">
+                                                        قهوه
+                                                        {{ item.product_obj.title }}</h4>
+                                                    <div>
                                                 <span
                                                         class="text-teal-600 dark:text-emerald-500 text-xs tracking-tight">14500
                                                     تومان تخفیف</span>
-                                                    <div class="text-zinc-700 dark:text-white font-DanaDemiBold">
-                                                        {{ item.product_obj.price }}
-                                                        <span class="font-Dana text-sm">تومان</span>
+                                                        <div class="text-zinc-700 dark:text-white font-DanaDemiBold">
+                                                            {{ item.product_obj.price }}
+                                                            <span class="font-Dana text-sm">تومان</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    {% endfor %}
+                                        {% endfor %}
 
                                     </div>
                                     <!-- cart footer -->
@@ -129,7 +130,10 @@
                                                 <span class="font-Dana text-sm">تومان</span>
                                             </div>
                                         </div>
-                                        <button onclick="addToOrderList()" class="flex items-center justify-center w-[144px] h-14 text-white bg-teal-600 dark:bg-emerald-500 hover:bg-teal-700 dark:hover:bg-emerald-600 transition-colors rounded-xl">ثبت سفارش</button>
+                                        <button onclick="addToOrderList()"
+                                                class="flex items-center justify-center w-[144px] h-14 text-white bg-teal-600 dark:bg-emerald-500 hover:bg-teal-700 dark:hover:bg-emerald-600 transition-colors rounded-xl">
+                                            ثبت سفارش
+                                        </button>
                                     </div>
                                 </div>
 
@@ -395,7 +399,7 @@
     {% block content %}
         <!-- main -->
         <main
-            class="mb-12 font-Dana bg-zinc-800 dark:bg-zinc-800">
+                class="mb-12 font-Dana bg-zinc-800 dark:bg-zinc-800">
             <!-- header -->
 
             <!-- body -->
@@ -410,13 +414,33 @@
                             <h3 class="section-title">جدیدترین محصولات</h3>
                             <span class="section-subtitle">فراوری شده از قهوه</span>
                         </div>
-                        <a href="#" class="section-link">
-                            <span class="hidden md:inline-block">مشاهده همه محصولات</span>
-                            <span class="inline-block md:hidden">مشاهده همه</span>
-                            <svg class="w-5 h-5">
-                                <use href="#chevron-left-mini"></use>
-                            </svg>
-                        </a>
+
+                        <select name="لبی"
+                                id="category-id-filter">
+                            <option value="" selected>انتخاب دسته بندی</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.title }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <select id="order-by-filter">
+                            <option value="" selected>مرتب سازی</option>
+                            <option value="-created_date">جدیدترین</option>
+                            <option value="created_date">قدیمی ترین</option>
+                            <option value="-price">بیشترین قیمت</option>
+                            <option value="price">کمترین قیمت</option>
+                        </select>
+
+                        <form action="">
+                                <h5>جستو جوی کالا</h5>
+                                <div class="">
+                                    <input placeholder="واژه مورد نظر را وارد نمایید" type="text"
+                                           name="q" id="search-query-filter">
+                                    <button type="submit">send</button>
+                                </div>
+                        </form>
+
+
                     </div>
                     <!-- body products -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5">
@@ -441,57 +465,57 @@
                                     </div>
                                 </div>
                                 <!-- footer -->
-{#                                <div class="flex items-center justify-between mt-2.5 md:mt-4">#}
-{#                                    <div class="flex items-center gap-x-2.5 md:gap-x-3 ">#}
-{#                                <span#}
-{#                                        class="flex items-center justify-center w-[26px] h-[26px] md:w-9 md:h-9 text-gray-400 hover:text-white bg-gray-100 dark:bg-zinc-800 hover:bg-teal-600 dark:hover:bg-emerald-500 transition-colors rounded-full">#}
-{#                                    <button id="cart-btn-{{ product.id }}"#}
-{#                                            type="button"#}
-{#                                            onclick="addToCart({{ product.id }})"#}
-{#                                            class="flex items-center justify-center w-[26px] h-[26px] md:w-9 md:h-9 text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-emerald-500 transition-colors rounded-full">#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-[22px] md:h-[22px]">#}
-{#                                            <use href="#shopping-cart"></use>#}
-{#                                        </svg>#}
-{#                                    </button>#}
-{#                                </span>#}
-{#                                        <span class="text-gray-400 hover:text-teal-600 dark:hover:text-emerald-500">#}
-{#                                    <button type="button" class="{% if product.id in favorite_ids %}active{% endif %}"#}
-{#                                            id="favorite-{{ product.id }}"#}
-{#                                            onclick="addToFavorite({{ product.id }})"#}
-{#                                    >#}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6 ">#}
-{#                                            <use href="#heart"></use>#}
-{#                                        </svg>#}
-{#                                    </button>#}
-{##}
-{#                                </span>#}
-{#                                    </div>#}
-{#                                    <div class="flex text-yellow-400">#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6 text-gray-400">#}
-{#                                            <use href="#star"></use>#}
-{#                                        </svg>#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
-{#                                            <use href="#star"></use>#}
-{#                                        </svg>#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
-{#                                            <use href="#star"></use>#}
-{#                                        </svg>#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
-{#                                            <use href="#star"></use>#}
-{#                                        </svg>#}
-{##}
-{#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
-{#                                            <use href="#star"></use>#}
-{#                                        </svg>#}
-{##}
-{##}
-{#                                    </div>#}
-{#                                </div>#}
+                                {#                                <div class="flex items-center justify-between mt-2.5 md:mt-4">#}
+                                {#                                    <div class="flex items-center gap-x-2.5 md:gap-x-3 ">#}
+                                {#                                <span#}
+                                {#                                        class="flex items-center justify-center w-[26px] h-[26px] md:w-9 md:h-9 text-gray-400 hover:text-white bg-gray-100 dark:bg-zinc-800 hover:bg-teal-600 dark:hover:bg-emerald-500 transition-colors rounded-full">#}
+                                {#                                    <button id="cart-btn-{{ product.id }}"#}
+                                {#                                            type="button"#}
+                                {#                                            onclick="addToCart({{ product.id }})"#}
+                                {#                                            class="flex items-center justify-center w-[26px] h-[26px] md:w-9 md:h-9 text-gray-400 bg-gray-100 dark:bg-zinc-800 hover:bg-emerald-500 transition-colors rounded-full">#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-[22px] md:h-[22px]">#}
+                                {#                                            <use href="#shopping-cart"></use>#}
+                                {#                                        </svg>#}
+                                {#                                    </button>#}
+                                {#                                </span>#}
+                                {#                                        <span class="text-gray-400 hover:text-teal-600 dark:hover:text-emerald-500">#}
+                                {#                                    <button type="button" class="{% if product.id in favorite_ids %}active{% endif %}"#}
+                                {#                                            id="favorite-{{ product.id }}"#}
+                                {#                                            onclick="addToFavorite({{ product.id }})"#}
+                                {#                                    >#}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6 ">#}
+                                {#                                            <use href="#heart"></use>#}
+                                {#                                        </svg>#}
+                                {#                                    </button>#}
+                                {##}
+                                {#                                </span>#}
+                                {#                                    </div>#}
+                                {#                                    <div class="flex text-yellow-400">#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6 text-gray-400">#}
+                                {#                                            <use href="#star"></use>#}
+                                {#                                        </svg>#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
+                                {#                                            <use href="#star"></use>#}
+                                {#                                        </svg>#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
+                                {#                                            <use href="#star"></use>#}
+                                {#                                        </svg>#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
+                                {#                                            <use href="#star"></use>#}
+                                {#                                        </svg>#}
+                                {##}
+                                {#                                        <svg class="w-4 h-4 md:w-6 md:h-6">#}
+                                {#                                            <use href="#star"></use>#}
+                                {#                                        </svg>#}
+                                {##}
+                                {##}
+                                {#                                    </div>#}
+                                {#                                </div>#}
                             </div>
 
                         {% endfor %}
@@ -506,6 +530,34 @@
     {% block js %}
 
         <script src="{% static 'src/js/cart.js' %}"></script>
+
+        <script>
+
+
+            $(document).ready(function (){
+                let current_url_params = new URLSearchParams(window.location.search)
+                $("#category-id-filter").val(current_url_params.get("category_id") || "")
+                $("#order-by-filter").val(current_url_params.get("order_by") || "")
+                $("#search-query-filter").val(current_url_params.get("q") || "")
+            })
+
+            $("#category-id-filter").change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                let selectedOption = $(this).val();
+                current_url_params.set("category_id", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            })
+
+            $("#order-by-filter").change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                let selectedOption = $(this).val();
+                current_url_params.set("order_by", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            })
+
+        </script>
 
     {% endblock %}
 

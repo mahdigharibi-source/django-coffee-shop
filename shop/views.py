@@ -2,14 +2,13 @@ from itertools import product
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import FieldError
 from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.views import View
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView
-
 from cart.cart import CartSession
 from shop.forms import CommentsForm
-from shop.models import Product, ProductStatusType, Favorite
+from shop.models import Product, ProductStatusType, Favorite, Category
 
 
 class ProductListView(ListView):
@@ -17,8 +16,25 @@ class ProductListView(ListView):
     template_name = 'shop/product-list.html'
     context_object_name = 'products'
 
+    def get_queryset(self):
+        queryset = Product.objects.filter(
+            status=ProductStatusType.PUBLISHED)
+        if category_id := self.request.GET.get("category_id"):
+            queryset = queryset.filter(category__id=category_id)
+        if search_q := self.request.GET.get("q"):
+            queryset = queryset.filter(title__icontains=search_q)
+        if order_by := self.request.GET.get("order_by"):
+            try:
+                queryset = queryset.order_by(order_by)
+                print('ok')
+            except FieldError:
+                pass
+
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
         if self.request.user.is_authenticated:
             context['favorite_ids'] = set(
                 Favorite.objects.filter(user=self.request.user).values_list('product_id', flat=True)
