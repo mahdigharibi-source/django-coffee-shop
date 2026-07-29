@@ -32,13 +32,6 @@ class ProductListView(ListView):
 
         return queryset
 
-    def post(self, request, *args, **kwargs):
-        search_q = self.request.POST.get('q')
-        if search_q:
-            products = Product.objects.filter(title__icontains=search_q)
-            return render(request, 'shop/product-list.html', context={'products': products})
-        return render(request, "shop/product-list.html")
-
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
