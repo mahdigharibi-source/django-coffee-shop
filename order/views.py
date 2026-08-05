@@ -1,37 +1,43 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Sum, Q
-from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView, CreateView, TemplateView
-import traceback # این را بالای فایل اضافه کنید
+from django.views.generic import ListView
+import traceback
 from address.models import Address
 from cart.cart import CartSession
-from cart.models import CartItems, Cart
+from cart.models import Cart
 from order.models import Order, OrderItem, Discount
-
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import TemplateView
+from django.db.models.functions import Coalesce
 
-class OrderListView(TemplateView):
+class OrderListView(LoginRequiredMixin, ListView):
     template_name = 'order/order_list.html'
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return(
+            Order.objects.filter(user=self.request.user)
+            .annotate(
+                item_count=Coalesce(Sum('order_items__quantity'), 0)
+            )
+            .prefetch_related("order_items__product")
+            .select_related("discount")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_orders = Order.objects.filter(user=self.request.user)
-        status = user_orders.aggregate(total=Count('id'),
-                                pending=Count('id', filter=Q(status="PENDING")),
-                                paid=Count('id', filter=Q(status="PAID")),
-                                shipped=Count('id', filter=Q(status="SHIPPED")),
-                                delivered=Count('id', filter=Q(status="DELIVERED")),
-                                canceled=Count('id', filter=Q(status="CANCELED")),
-                                expired=Count('id', filter=Q(status="EXPIRED")),
-                            )
-        context['orders'] = user_orders.annotate(item_count=Sum('order_items__quantity')).prefetch_related("order_items__product").select_related("discount")
-        context['stat'] = status
-        return context
 
+        context['stat'] = Order.objects.aggregate(total=Count('id'),
+                        pending=Count('id', filter=Q(status="PENDING")),
+                        paid=Count('id', filter=Q(status="PAID")),
+                        shipped=Count('id', filter=Q(status="SHIPPED")),
+                        delivered=Count('id', filter=Q(status="DELIVERED")),
+                        canceled=Count('id', filter=Q(status="CANCELED")),
+                        expired=Count('id', filter=Q(status="EXPIRED")),
+                    )
+        return context
 
 class OrderCreateView(LoginRequiredMixin, View):
 
