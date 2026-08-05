@@ -1,17 +1,15 @@
 from datetime import date, timedelta
+from decimal import Decimal
 from random import choices, randint
 from string import ascii_uppercase, digits
+from django.core.exceptions import ValidationError
+from django.db.models import Sum, F
 from django.utils import timezone
 from django.db import models
-from tailwind.validate import ValidationError
 from django.utils.translation import gettext_lazy as _
 from accounts.models import CustomUser
 from address.models import Address
 from shop.models import Product
-
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-
 
 
 class OrderStatus(models.TextChoices):
@@ -123,6 +121,9 @@ class Order(models.Model):
     # order_items
 
 
+    class Meta:
+        ordering = ['-created_at']
+
     def calculate_final_price(self):
         discount_amount = 0
 
@@ -134,11 +135,10 @@ class Order(models.Model):
         return final_price
 
     def calculate_total_price(self):
-        total_price_in_order = 0
-        for item in self.order_items.all():
-            total_price_in_order += item.total_price
-        return total_price_in_order
-
+        totals = self.order_items.aggregate(
+            total_price=Sum(F("quantity") * F("price")),
+        )
+        return totals["total_price"] or Decimal("0.00")
 
     def is_expired(self):
         if timezone.now() - self.created_at > timedelta(minutes=30):
