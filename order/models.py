@@ -164,6 +164,11 @@ class OrderItem(models.Model):
     def total_price(self):
         return self.quantity * self.price
 
+    def clean(self):
+        if self.quantity <= 0:
+            raise ValidationError("Quantity must be positive.")
+        if self.price < 0:
+            raise ValidationError("Price cannot be negative.")
 
 #
 # @receiver(post_save, sender=OrderItem)
