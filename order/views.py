@@ -56,11 +56,6 @@ class OrderCreateView(LoginRequiredMixin, View):
 
                 addresses = Address.objects.filter(user=request.user)
                 if not addresses.exists():
-                    # return JsonResponse({
-                    #     'status': 'error',
-                    #     'message': 'لطفا ابتدا یک آدرس انتخاب کنید',
-                    #     'redirect_url': reverse('address:address-create')
-                    # }, status=400)
                     return redirect('address:address-create')
 
                 else:
@@ -84,15 +79,12 @@ class OrderCreateView(LoginRequiredMixin, View):
 
                     )
 
-
-
                 # پاک کردن سبد خرید پس از ثبت موفق
                 cart.items.all().delete()
                 cart.delete()
 
                 cart_session = CartSession(self.request)
                 cart_session.clear()
-
 
                 order.total_price = order.calculate_total_price()
                 order.final_price = order.calculate_final_price()
@@ -101,28 +93,13 @@ class OrderCreateView(LoginRequiredMixin, View):
                     order.status = 'EXPIRED'
 
                 order.save()
-                print(order.final_price)
 
                 return redirect('payment:payment_create')
 
-                # return JsonResponse({
-                #     'status': 'success',
-                #     'naro' : 'naro',
-                #     'redirect_url': reverse('payment:payment_create')
-                # })
-
-
-
-
         except Exception as e:
-
-            # این بخش بسیار مهم است:
-
-            # اگر هر خطایی رخ دهد، متن دقیق خطا را در پاسخِ AJAX می‌فرستد
-
             error_message = traceback.format_exc()
 
-            print(f"DEBUG ERROR: {error_message}")  # این را در ترمینال چاپ می‌کند
+            print(f"DEBUG ERROR: {error_message}")
 
             return JsonResponse({
 
@@ -130,8 +107,7 @@ class OrderCreateView(LoginRequiredMixin, View):
 
                 'message': str(e),
 
-                'traceback': error_message  # این باعث می‌شود خطا را در مرورگر ببینید
-
+                'traceback': error_message
             }, status=500)
 
 
