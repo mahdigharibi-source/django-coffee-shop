@@ -33,6 +33,8 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('order/', include('order.urls')),
     path('payment/', include('payment.urls')),
+    # for browsable api
+    path('api-auth/', include('rest_framework.urls')),
 ]
 
 if settings.DEBUG:

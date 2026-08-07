@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'payment.apps.PaymentConfig',
 
     'rest_framework',
-
+    'rest_framework.authtoken',
     'website',
     #third party
     "tailwind",
