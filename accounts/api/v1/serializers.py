@@ -23,3 +23,37 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password1')
         return CustomUser.objects.create_user(**validated_data)
+
+from rest_framework import serializers
+from django.contrib.auth import authenticate
+
+
+class CustomAuthTokenSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        write_only=True
+    )
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = authenticate(
+            request=self.context.get('request'),
+            email=email,
+            password=password
+        )
+
+        if not user:
+            raise serializers.ValidationError(
+                "Unable to log in with provided credentials."
+            )
+
+        if not user.is_active:
+            raise serializers.ValidationError(
+                "User account is disabled."
+            )
+
+        attrs['user'] = user
+        return attrs

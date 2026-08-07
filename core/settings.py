@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    "drf_spectacular",
     'website',
     #third party
     "tailwind",
@@ -163,12 +164,31 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Coffee Shop API",
+    "DESCRIPTION": "API documentation for Coffee Shop",
+    "VERSION": "1.0.0",
+
+    "COMPONENTS": {
+        "securitySchemes": {
+            "TokenAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization",
+            }
+        }
+    },
 }
