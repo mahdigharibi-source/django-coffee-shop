@@ -7,7 +7,7 @@ from .views import *
 app_name = 'accounts-api-v1'
 urlpatterns = [
     # User profile management
-    path('user', UserInformationApi.as_view(), name='user'),
+    path('profile/', ProfileApiView.as_view(), name='user'),
 
     # Registration management
     path('registration/', RegistrationApiView.as_view(), name='registration'),
@@ -15,7 +15,7 @@ urlpatterns = [
     # path("register/email-verify/resend/", ResendVerifyEmailApiView.as_view(), name="email_verify"),
 
     # Password management
-    # path("change-password/", ChangePasswordView.as_view(), name="change-password"),
+    path("change-password/", ChangePasswordApiView.as_view(), name="change-password-api"),
     # path("reset-password/", PasswordResetRequestEmailApiView.as_view(), name="reset-password-request"),
     # path("reset-password/validate-token/", PasswordResetTokenValidateApiView.as_view(), name="reset-password-validate"),
     # path("reset-password/set-password/", PasswordResetSetNewApiView.as_view(), name="reset-password-confirm"),

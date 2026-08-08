@@ -1,8 +1,8 @@
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
-from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from rest_framework import serializers
+from django.contrib.auth import authenticate
 from accounts.models import CustomUser
 
 
@@ -26,8 +26,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop('password1')
         return CustomUser.objects.create_user(**validated_data)
 
-from rest_framework import serializers
-from django.contrib.auth import authenticate
 
 
 class CustomAuthTokenSerializer(serializers.Serializer):
@@ -66,3 +64,23 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['email'] = self.user.email
         data['user_id'] = self.user.id
         return data
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        old_password = attrs.get('old_password')
+        new_password1 = attrs.get('new_password1')
+        new_password2 = attrs.get('new_password2')
+
+        if new_password1 != new_password2:
+            raise serializers.ValidationError({'detail':'passwords is not match'})
+
+        try:
+            validate_password(attrs.get('new_password1'))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
+
+        return super().validate(attrs)
