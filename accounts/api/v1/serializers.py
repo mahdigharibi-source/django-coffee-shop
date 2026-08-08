@@ -71,16 +71,17 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password2 = serializers.CharField(required=True)
 
     def validate(self, attrs):
-        old_password = attrs.get('old_password')
-        new_password1 = attrs.get('new_password1')
-        new_password2 = attrs.get('new_password2')
+        user = self.instance
 
-        if new_password1 != new_password2:
+        if attrs.get('new_password1') != attrs.get('new_password2'):
             raise serializers.ValidationError({'detail':'passwords is not match'})
 
-        try:
-            validate_password(attrs.get('new_password1'))
-        except exceptions.ValidationError as e:
-            raise serializers.ValidationError({'password': list(e.messages)})
+        if not user.check_password(attrs.get('old_password')):
+            raise serializers.ValidationError({'old_password':'old password is not match'})
 
-        return super().validate(attrs)
+        return attrs
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password1'])
+        instance.save()
+        return instance
