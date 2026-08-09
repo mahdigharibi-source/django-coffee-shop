@@ -1,6 +1,5 @@
-from django.contrib.auth.views import LogoutView
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from .views import *
 
@@ -8,6 +7,10 @@ app_name = 'accounts-api-v1'
 urlpatterns = [
     # User profile management
     path('profile/', ProfileApiView.as_view(), name='user'),
+    # activation
+    path('activation/confirm/<str:token>', ActivationApiView().as_view(), name='activate'),
+    # resent activation
+    # path('activation/resend')
 
     # Registration management
     path('registration/', RegistrationApiView.as_view(), name='registration'),

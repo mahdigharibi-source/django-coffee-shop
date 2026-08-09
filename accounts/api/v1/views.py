@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status, generics
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import GenericAPIView
@@ -6,11 +7,14 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from mail_templated import EmailMessage
 from accounts.api.v1.serializers import RegistrationSerializer, CustomTokenObtainPairSerializer, \
     ChangePasswordSerializer
-from . serializers import CustomAuthTokenSerializer
+from .serializers import CustomAuthTokenSerializer
+from .utils import EmailThread
 from ...models import CustomUser
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
 
 class ProfileApiView(APIView):
@@ -19,8 +23,9 @@ class ProfileApiView(APIView):
             'email': request.user.email,
             'id': request.user.id,
             'is_authenticated': request.user.is_authenticated,
-
         })
+
+
 class RegistrationApiView(GenericAPIView):
     serializer_class = RegistrationSerializer
 
@@ -28,8 +33,33 @@ class RegistrationApiView(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            data = {
+                'email': serializer.validated_data['email'],
+            }
+            user_obj = get_object_or_404(CustomUser, email=data['email'])
+            token = self.get_tokens_for_user(user_obj)
+
+            email_obj = EmailMessage(
+                'email/hello.html',
+                {'token': token['access']},
+                'admin@admin.com',
+                to=['mahdionlineee@gmail.com'],
+            )
+            EmailThread(email_obj).start()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def get_tokens_for_user(self, user):
+        if not user.is_active:
+            raise AuthenticationFailed("User is not active")
+
+        refresh = RefreshToken.for_user(user)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
 
 class CustomObtainAuthToken(ObtainAuthToken):
     serializer_class = CustomAuthTokenSerializer
@@ -43,10 +73,12 @@ class CustomObtainAuthToken(ObtainAuthToken):
             'token': token.key,
             'email': user.email,
             'id': user.id,
-            })
+        })
+
 
 class ApiLogoutTokenView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         user = request.user
         token = Token.objects.get(user=user)
@@ -57,6 +89,7 @@ class ApiLogoutTokenView(APIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
+
 class ChangePasswordApiView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     model = CustomUser
@@ -66,3 +99,6 @@ class ChangePasswordApiView(generics.UpdateAPIView):
         return self.request.user
 
 
+class ActivationApiView(APIView):
+    def get(self, request, *args, **kwargs):
+        return Response({'ok'})

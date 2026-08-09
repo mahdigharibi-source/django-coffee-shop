@@ -3,7 +3,7 @@ from django.core import exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Profile
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
