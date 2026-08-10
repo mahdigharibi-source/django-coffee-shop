@@ -4,6 +4,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from accounts.models import CustomUser, Profile
+import jwt
+from django.conf import settings
+from rest_framework.exceptions import AuthenticationFailed, ValidationError
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -103,3 +106,85 @@ class ActivationResendSerializer(serializers.Serializer):
 
         attrs['user'] = user_obj
         return attrs
+
+class PasswordResetRequestEmailSerializer(serializers.Serializer):
+    # email = serializers.SerializerMethodField()
+    # password = serializers.CharField(required=True)
+    # password1 = serializers.CharField(required=True)
+    #
+    # def get_email(self, obj):
+    #     return self.context['request'].user.email
+    #
+    # def validate(self, attrs):
+    #     if attrs.get('password') != attrs.get('password1'):
+    #         raise serializers.ValidationError({'password': 'passwords dose not match'})
+    #
+    #     return super(PasswordResetRequestEmailSerializer, self).validate(attrs)
+
+    email = serializers.EmailField(min_length=2)
+
+    class Meta:
+        fields = ['email']
+
+    def validate(self, attrs):
+        try:
+            user = CustomUser.objects.get(email=attrs["email"])
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError(
+                {"detail": "There is no user with provided email"})
+        attrs["user"] = user
+        return super().validate(attrs)
+
+
+
+class PasswordResetTokenVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(max_length=600)
+
+    class Meta:
+        model = CustomUser
+        fields = ['token']
+
+    def validate(self, attrs):
+        token = attrs['token']
+        try:
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=['HS256'])
+            user = CustomUser.objects.get(id=payload['user_id'])
+        except jwt.ExpiredSignatureError as identifier:
+            return serializers.ValidationError({'detail': 'Token expired'})
+        except jwt.exceptions.DecodeError as identifier:
+            raise serializers.ValidationError({'detail': 'Token invalid'})
+
+        attrs["user"] = user
+        return super().validate(attrs)
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=600)
+    password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+    password1 = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+
+    class Meta:
+        fields = ['password', 'password1', 'token']
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["password1"]:
+            raise serializers.ValidationError(
+                {"details": "Passwords does not match"}
+            )
+        try:
+            password = attrs.get('password')
+            token = attrs.get('token')
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=['HS256'])
+            user = CustomUser.objects.get(id=payload['user_id'])
+            user.set_password(password)
+            user.save()
+
+            return super().validate(attrs)
+        except Exception as e:
+            print(type(e))
+            print(e)
+            raise AuthenticationFailed('The reset link is invalid', 401)
