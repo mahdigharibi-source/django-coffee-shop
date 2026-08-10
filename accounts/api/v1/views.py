@@ -1,3 +1,4 @@
+import jwt
 from django.shortcuts import get_object_or_404
 from rest_framework import status, generics
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -8,8 +9,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from mail_templated import EmailMessage
-from accounts.api.v1.serializers import RegistrationSerializer, CustomTokenObtainPairSerializer, \
-    ChangePasswordSerializer
+from accounts.api.v1.serializers import RegistrationSerializer, CustomTokenObtainPairSerializer, ChangePasswordSerializer
+from core import settings
 from .serializers import CustomAuthTokenSerializer
 from .utils import EmailThread
 from ...models import CustomUser
@@ -101,4 +102,17 @@ class ChangePasswordApiView(generics.UpdateAPIView):
 
 class ActivationApiView(APIView):
     def get(self, request, *args, **kwargs):
-        return Response({'ok'})
+        try:
+            token = jwt.decode(kwargs['token'], settings.SECRET_KEY, algorithms=['HS256'])
+
+        except jwt.ExpiredSignatureError:
+            return Response({'detail': 'token has been expired'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.InvalidTokenError:
+            return Response({'detail': 'token is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = CustomUser.objects.get(id=token['user_id'])
+        if user.is_verified:
+            return Response({'messages': 'your account has already been verified'})
+        user.is_verified = True
+        user.save()
+        return Response({'messages': 'your account have been verified'}, status=status.HTTP_200_OK)
