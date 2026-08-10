@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     #third party
     "tailwind",
     "theme",
+    'djoser',
 ]
 
 #tailwind
