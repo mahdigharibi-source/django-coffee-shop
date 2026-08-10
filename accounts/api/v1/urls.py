@@ -10,7 +10,7 @@ urlpatterns = [
     # activation
     path('activation/confirm/<str:token>', ActivationApiView().as_view(), name='activate'),
     # resent activation
-    # path('activation/resend')
+    path('activation/resend', ActivationResendApiView.as_view(), name='resend'),
 
     # Registration management
     path('registration/', RegistrationApiView.as_view(), name='registration'),

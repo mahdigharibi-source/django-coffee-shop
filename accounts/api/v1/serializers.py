@@ -85,3 +85,21 @@ class ChangePasswordSerializer(serializers.Serializer):
         instance.set_password(validated_data['new_password1'])
         instance.save()
         return instance
+
+class ActivationResendSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        try:
+            user_obj = CustomUser.objects.get(email=email)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({'email':'email does not exist'})
+
+        if user_obj.is_verified:
+            raise serializers.ValidationError({
+                'messages': 'user already activated and verified'
+            })
+
+        attrs['user'] = user_obj
+        return attrs

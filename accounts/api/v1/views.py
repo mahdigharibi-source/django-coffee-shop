@@ -9,7 +9,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from mail_templated import EmailMessage
-from accounts.api.v1.serializers import RegistrationSerializer, CustomTokenObtainPairSerializer, ChangePasswordSerializer
+from accounts.api.v1.serializers import RegistrationSerializer, CustomTokenObtainPairSerializer, \
+    ChangePasswordSerializer, ActivationResendSerializer
 from core import settings
 from .serializers import CustomAuthTokenSerializer
 from .utils import EmailThread
@@ -116,3 +117,30 @@ class ActivationApiView(APIView):
         user.is_verified = True
         user.save()
         return Response({'messages': 'your account have been verified'}, status=status.HTTP_200_OK)
+
+class ActivationResendApiView(APIView):
+    serializer_class = ActivationResendSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = ActivationResendSerializer(data=request.data)
+        if serializer.is_valid():
+            user_obj = serializer.validated_data['user']
+            token = self.get_tokens_for_user(user_obj)
+
+            email_obj = EmailMessage(
+                'email/hello.html',
+                {'token': token['access']},
+                'admin@admin.com',
+                to=[user_obj.email],
+            )
+            EmailThread(email_obj).start()
+            return Response({'messages': 'user activation resend successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_tokens_for_user(self, user):
+        if not user.is_active:
+            raise AuthenticationFailed("User is not active")
+
+        refresh = RefreshToken.for_user(user)
+        return {
+            'access': str(refresh.access_token),
+        }
