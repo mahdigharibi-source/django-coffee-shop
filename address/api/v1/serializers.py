@@ -10,3 +10,9 @@ class AddressCreateSerializer(serializers.ModelSerializer):
         exclude = ('created_at','updated_at')
 
         extra_kwargs = {'user':{'read_only':True}}
+
+class AddressUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        exclude = ('created_at', 'updated_at')
+        extra_kwargs = {'user': {'read_only': True}}
